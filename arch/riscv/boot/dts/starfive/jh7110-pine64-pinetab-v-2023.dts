@@ -10,8 +10,8 @@
 #include <dt-bindings/input/linux-event-codes.h>
 
 / {
-	model = "Pine64 PineTab-V (2025)";
-	compatible = "pine64,pinetab-v-2025", "starfive,jh7110";
+	model = "Pine64 PineTab-V (2023)";
+	compatible = "pine64,pinetab-v-2023", "starfive,jh7110";
 };
 
 &gpio_keys {
@@ -20,16 +20,7 @@
 		debounce-interval = <10>;
 		linux,input-type = <EV_KEY>;
 		linux,code = <KEY_VOLUMEUP>;
-		gpios = <&aongpio 0 GPIO_ACTIVE_LOW>;
-	};
-};
-
-&i2c0 {
-	accelerometer@18 {
-		compatible = "silan,sc7a20";
-		reg = <0x18>;
-		mount-matrix =	"0", "0",  "-1",
-				"1", "0",  "0",
-				"0", "-1", "0";
+		/* swapped with Vol- in 2023 schematic */
+		gpios = <&sysgpio 51 GPIO_ACTIVE_LOW>;
 	};
 };
