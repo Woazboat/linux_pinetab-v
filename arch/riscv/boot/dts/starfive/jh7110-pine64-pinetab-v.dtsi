@@ -147,6 +147,10 @@
 	status = "disabled";
 };
 
+&pcie0 {
+        status = "okay";
+};
+
 &i2c0 {
 	es8316: audio-codec@11 {
 		pinctrl-0 = <&mclk_ext_pins>;
