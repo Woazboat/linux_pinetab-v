@@ -20,7 +20,7 @@
 		debounce-interval = <10>;
 		linux,input-type = <EV_KEY>;
 		linux,code = <KEY_VOLUMEUP>;
-		gpios = <&aongpio 0 GPIO_ACTIVE_LOW>;
+		gpios = <&aongpio 0 GPIO_ACTIVE_HIGH>;
 	};
 };
 
