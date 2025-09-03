@@ -8,6 +8,7 @@
 /dts-v1/;
 #include "jh7110-common.dtsi"
 #include <dt-bindings/input/linux-event-codes.h>
+#include <dt-bindings/leds/common.h>
 #include <dt-bindings/pwm/pwm.h>
 
 / {
@@ -20,19 +21,12 @@
 		compatible = "gpio-keys";
 		autorepeat;
 
-		bat: battery {
-			compatible = "simple-battery";
-			charge-full-design-microamp-hours = <9800000>;
-			voltage-max-design-microvolt = <4350000>;
-			voltage-min-design-microvolt = <3000000>;
-		};
-
 		key-vol-down {
 			label = "volume down key";
 			debounce-interval = <10>;
 			linux,input-type = <EV_KEY>;
 			linux,code = <KEY_VOLUMEDOWN>;
-			/* swapped with Vol+ in 2023 schematic */
+			/* labeled as Vol+ in 2023 schematic */
 			gpios = <&sysgpio 49 GPIO_ACTIVE_LOW>;
 		};
 
@@ -57,6 +51,35 @@
 		compatible = "gpio-restart";
 		gpios = <&sysgpio 35 GPIO_ACTIVE_HIGH>;
 		priority = <160>;
+	};
+
+	leds {
+		compatible = "gpio-leds";
+		led-flash {
+			gpios = <&sysgpio 55 GPIO_ACTIVE_HIGH>;
+			color = <LED_COLOR_ID_WHITE>;
+			function = LED_FUNCTION_FLASH;
+			linux,default-trigger = "flash";
+			label = "Camera Flash";
+			power-supply = <&vcc_5v>;
+		};
+	};
+
+	backlight: backlight {
+		compatible = "pwm-backlight";
+		pwms = <&pwm 0 50000 PWM_POLARITY_INVERTED>;
+		brightness-levels = <0 1023>;
+		num-interpolated-steps = <1023>;
+		// default-brightness-level = <576>;
+		status = "okay";
+		power-supply = <&vcc_5v>;
+	};
+
+	bat: battery {
+		compatible = "simple-battery";
+		charge-full-design-microamp-hours = <9800000>;
+		voltage-max-design-microvolt = <4350000>;
+		voltage-min-design-microvolt = <3000000>;
 	};
 
 	vcc_5v: regulator-vcc-5v {
