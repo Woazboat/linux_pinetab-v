@@ -26,7 +26,7 @@
 			debounce-interval = <10>;
 			linux,input-type = <EV_KEY>;
 			linux,code = <KEY_VOLUMEDOWN>;
-			/* labeled as Vol+ in 2023 schematic */
+			/* labeled as Vol+ in pinetab-v 2023 schematic */
 			gpios = <&sysgpio 49 GPIO_ACTIVE_LOW>;
 		};
 
@@ -259,6 +259,18 @@
 	// 	ti,input-current-limit = <2000000>;
 	// 	monitored-battery = <&bat>;
 	// };
+};
+
+&axp15060 {
+	regulators {
+		mipi_0p9: aldo1 {
+			regulator-boot-on;
+			regulator-compatible = "aldo1";
+			regulator-name = "mipi_0p9";
+			regulator-min-microvolt = <900000>;
+			regulator-max-microvolt = <900000>;
+		};
+	};
 };
 
 &i2srx {
