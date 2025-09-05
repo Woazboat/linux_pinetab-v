@@ -20,7 +20,7 @@
 		debounce-interval = <10>;
 		linux,input-type = <EV_KEY>;
 		linux,code = <KEY_VOLUMEUP>;
-		/* swapped with Vol- in 2023 schematic */
+		/* incorrectly labeled as Vol- in pinetab-v 2023 schematic */
 		gpios = <&sysgpio 51 GPIO_ACTIVE_LOW>;
 	};
 };

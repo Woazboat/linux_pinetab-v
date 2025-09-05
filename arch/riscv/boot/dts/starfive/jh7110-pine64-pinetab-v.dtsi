@@ -15,6 +15,13 @@
 / {
 	chassis-type = "tablet";
 
+	bat: battery {
+		compatible = "simple-battery";
+		charge-full-design-microamp-hours = <9800000>;
+		voltage-max-design-microvolt = <4350000>;
+		voltage-min-design-microvolt = <3000000>;
+	};
+
 	gpio_keys: gpio-keys {
 		compatible = "gpio-keys";
 		autorepeat;
@@ -24,7 +31,7 @@
 			debounce-interval = <10>;
 			linux,input-type = <EV_KEY>;
 			linux,code = <KEY_VOLUMEDOWN>;
-			/* labeled as Vol+ in pinetab-v 2023 schematic */
+			/* incorrectly labeled as Vol+ in pinetab-v 2023 schematic */
 			gpios = <&sysgpio 49 GPIO_ACTIVE_LOW>;
 		};
 
@@ -62,13 +69,6 @@
 			label = "Camera Flash";
 			power-supply = <&vcc_5v>;
 		};
-	};
-
-	bat: battery {
-		compatible = "simple-battery";
-		charge-full-design-microamp-hours = <9800000>;
-		voltage-max-design-microvolt = <4350000>;
-		voltage-min-design-microvolt = <3000000>;
 	};
 
 	vcc_5v: regulator-vcc-5v {
