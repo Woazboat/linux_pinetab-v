@@ -285,6 +285,10 @@
 	status = "okay";
 };
 
+&pwm {
+	status = "okay";
+};
+
 &pwm_pins {
 	pwm-pins {
 		pinmux = <GPIOMUX(45, GPOUT_SYS_PWM_CHANNEL0,
