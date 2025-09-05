@@ -53,6 +53,7 @@
 
 	leds {
 		compatible = "gpio-leds";
+
 		led-flash {
 			gpios = <&sysgpio 55 GPIO_ACTIVE_HIGH>;
 			color = <LED_COLOR_ID_WHITE>;
@@ -128,7 +129,6 @@
 		interrupts = <30 IRQ_TYPE_EDGE_FALLING>;
 		pinctrl-names = "default";
 		AVDD28-supply = <&vcc_3v3>;
-		// VDDIO-supply = <&vdd1833_gpio>;
 		irq-gpios = <&sysgpio 30 GPIO_ACTIVE_HIGH>;
 		reset-gpios = <&sysgpio 31 GPIO_ACTIVE_HIGH>;
 		status = "okay";
