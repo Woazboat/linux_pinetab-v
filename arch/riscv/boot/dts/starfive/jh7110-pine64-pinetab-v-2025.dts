@@ -11,7 +11,7 @@
 
 / {
 	model = "Pine64 PineTab-V (2025)";
-	compatible = "pine64,pinetab-v-2025", "starfive,jh7110";
+	compatible = "pine64,pinetab-v-2025", "pine64,pinetab-v", "starfive,jh7110";
 };
 
 &gpio_keys {

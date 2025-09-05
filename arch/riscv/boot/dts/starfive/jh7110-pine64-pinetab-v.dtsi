@@ -13,8 +13,6 @@
 #include <dt-bindings/interrupt-controller/irq.h>
 
 / {
-	model = "Pine64 PineTab-V";
-	compatible = "pine64,pinetab-v", "starfive,jh7110";
 	chassis-type = "tablet";
 
 	gpio_keys: gpio-keys {
@@ -65,15 +63,6 @@
 		};
 	};
 
-	backlight: backlight {
-		compatible = "pwm-backlight";
-		pwms = <&pwm 0 50000 PWM_POLARITY_INVERTED>;
-		brightness-levels = <0 1023>;
-		num-interpolated-steps = <1023>;
-		default-brightness-level = <576>;
-		power-supply = <&vcc_5v>;
-	};
-
 	bat: battery {
 		compatible = "simple-battery";
 		charge-full-design-microamp-hours = <9800000>;
@@ -104,58 +93,6 @@
 		vin-supply = <&vcc_3v3>;
 	};
 
-	speaker_amp: speaker-amplifier {
-		compatible = "simple-audio-amplifier";
-		enable-gpios = <&sysgpio 50 GPIO_ACTIVE_HIGH>;
-		sound-name-prefix = "Speaker Amplifier";
-	};
-
-	soundcard: snd-card1 {
-		compatible = "simple-audio-card";
-		#address-cells = <1>;
-		#size-cells = <0>;
-
-		simple-audio-card,name = "PineTab-V";
-		simple-audio-card,format = "i2s";
-		simple-audio-card,bitclock-master = <&soundcard_codec>;
-		simple-audio-card,frame-master = <&soundcard_codec>;
-
-		simple-audio-card,widgets =
-			"Microphone", "Internal Mic",
-			"Microphone", "Headset Mic",
-			"Headphone", "Headphones",
-			"Speaker", "Speaker";
-		simple-audio-card,routing =
-			"MIC1", "Headset Mic",
-			"MIC2", "Internal Mic",
-			"Headphones", "HPOL",
-			"Headphones", "HPOR",
-			"Speaker Amplifier INL", "HPOL",
-			"Speaker Amplifier INR", "HPOR",
-			"Speaker", "Speaker Amplifier OUTL",
-			"Speaker", "Speaker Amplifier OUTR";
-
-		simple-audio-card,hp-det-gpio = <&sysgpio 36 GPIO_ACTIVE_LOW>;
-		simple-audio-card,aux-devs = <&speaker_amp>;
-		simple-audio-card,pin-switches = "Speaker";
-
-		simple-audio-card,cpu@0 {
-			reg = <0>;
-			sound-dai = <&i2srx>;
-		};
-
-		simple-audio-card,cpu@1 {
-			reg = <1>;
-			sound-dai = <&i2stx1>;
-		};
-
-		soundcard_codec: simple-audio-card,codec {
-			sound-dai = <&es8316>;
-			clocks = <&mclk_ext>;
-			clock-names = "mclk";
-		};
-	};
-
 	reserved-memory {
 		#address-cells = <2>;
 		#size-cells = <2>;
@@ -181,30 +118,6 @@
 				0x0 0x6cc00000 0x0 0x00001000>;
 		};
 	};
-
-	clk_ext_camera: clk-ext-camera {
-		compatible = "fixed-clock";
-		#clock-cells = <0>;
-		clock-frequency = <24000000>;
-	};
-};
-
-&pcie0 {
-        status = "okay";
-};
-
-&i2c0 {
-	status = "okay";
-
-	es8316: audio-codec@11 {
-		pinctrl-0 = <&mclk_ext_pins>;
-		pinctrl-names = "default";
-		compatible = "everest,es8316";
-		reg = <0x11>;
-		clocks = <&mclk_ext>;
-		clock-names = "mclk";
-		#sound-dai-cells = <0>;
-	};
 };
 
 &i2c2 {
@@ -222,127 +135,19 @@
 	};
 };
 
-&i2c5 {
-	// cw2015@62 {
-	// 	status = "okay";
-	// 	compatible = "cellwise,cw2015";
-	// 	reg = <0x62>;
-	// 	cellwise,battery-profile = /bits/ 8
-	// 		<0x17 0x67 0x63 0x64 0x63 0x62 0x61 0x5E
-	// 		 0x59 0x61 0x55 0x57 0x60 0x50 0x43 0x3C
-	// 		 0x33 0x2D 0x27 0x24 0x26 0x2D 0x39 0x47
-	// 		 0x44 0x11 0x0E 0x15 0x20 0x41 0x48 0x55
-	// 		 0x59 0x5B 0x60 0x60 0x3F 0x19 0x6A 0x4A
-	// 		 0x0B 0x1B 0x2D 0x57 0x8B 0x93 0x96 0x13
-	// 		 0x2E 0x56 0xA3 0xCA 0x80 0x6A 0x99 0xCB
-	// 		 0x2F 0x00 0x64 0xA5 0xB5 0x11 0xF0 0x31>;
-	// 	cellwise,monitor-interval-ms = <5000>;
-	// 	monitored-battery = <&bat>;
-	// 	power-supplies = <&charger>;
-	// };
-
-	// Not yet supported by upstream
-	// charger: sc89890@6a {
-	// 	compatible = "sc,sc89890";
-	// 	status = "okay";
-	// 	reg = <0x6a>;
-	// 	interrupt-parent = <&sysgpio>;
-	// 	interrupts = <48 IRQ_TYPE_EDGE_FALLING>;
-	// 	ti,battery-regulation-voltage = <4350000>;
-	// 	ti,charge-current = <2000000>;
-	// 	ti,termination-current = <300000>;
-	// 	ti,precharge-current = <128000>;
-	// 	ti,minimum-sys-voltage = <3400000>;
-	// 	ti,boost-voltage = <5000000>;
-	// 	ti,boost-max-current = <1500000>;
-	// 	ti,use-ilim-pin = <0>;
-	// 	ti,input-current-limit = <2000000>;
-	// 	monitored-battery = <&bat>;
-	// };
-};
-
-&axp15060 {
-	regulators {
-		mipi_0p9: aldo1 {
-			regulator-boot-on;
-			regulator-compatible = "aldo1";
-			regulator-name = "mipi_0p9";
-			regulator-min-microvolt = <900000>;
-			regulator-max-microvolt = <900000>;
-		};
-	};
-};
-
-&i2srx {
+&usb0 {
+	dr_mode = "host";
 	pinctrl-names = "default";
-	pinctrl-0 = <&i2srx_pins>;
+	pinctrl-0 = <&usb0_pins>;
 	status = "okay";
 };
 
-&i2stx1 {
-	pinctrl-names = "default";
-	pinctrl-0 = <&i2stx1_pins>;
-	status = "okay";
-};
-
-&pwm {
-	status = "okay";
-};
-
-&pwm_pins {
-	pwm-pins {
-		pinmux = <GPIOMUX(45, GPOUT_SYS_PWM_CHANNEL0,
-				      GPOEN_SYS_PWM0_CHANNEL0,
-				      GPI_NONE)>;
-		bias-disable;
-		drive-strength = <12>;
-		input-disable;
-		input-schmitt-disable;
-		slew-rate = <0>;
-	};
+&usb_cdns3 {
+	phys = <&usbphy0>, <&pciephy0>;
+	phy-names = "cdns3,usb2-phy", "cdns3,usb3-phy";
 };
 
 &sysgpio {
-	i2srx_pins: i2srx-0 {
-		clk-sd-pins {
-			pinmux = <GPIOMUX(38, GPOUT_LOW,
-					      GPOEN_DISABLE,
-					      GPI_SYS_I2SRX_BCLK)>,
-				 <GPIOMUX(63, GPOUT_LOW,
-					      GPOEN_DISABLE,
-					      GPI_SYS_I2SRX_LRCK)>,
-				 <GPIOMUX(38, GPOUT_LOW,
-					      GPOEN_DISABLE,
-					      GPI_SYS_I2STX1_BCLK)>,
-				 <GPIOMUX(63, GPOUT_LOW,
-					      GPOEN_DISABLE,
-					      GPI_SYS_I2STX1_LRCK)>,
-				 <GPIOMUX(61, GPOUT_LOW,
-					      GPOEN_DISABLE,
-					      GPI_SYS_I2SRX_SDIN0)>;
-			input-enable;
-		};
-	};
-
-	i2stx1_pins: i2stx1-0 {
-		sd-pins {
-			pinmux = <GPIOMUX(44, GPOUT_SYS_I2STX1_SDO0,
-					      GPOEN_ENABLE,
-					      GPI_NONE)>;
-			bias-disable;
-			input-disable;
-		};
-	};
-
-	mclk_ext_pins: mclk-ext-0 {
-		mclk-ext-pins {
-			pinmux = <GPIOMUX(4, GPOUT_LOW,
-					     GPOEN_DISABLE,
-					     GPI_SYS_MCLK_EXT)>;
-			input-enable;
-		};
-	};
-
 	usb0_pins: usb0-0 {
 		vbus-pins {
 			pinmux = <GPIOMUX(25,  GPOUT_SYS_USB_DRIVE_VBUS,
@@ -363,22 +168,7 @@
 	};
 };
 
-&usb0 {
-	dr_mode = "host";
-	pinctrl-names = "default";
-	pinctrl-0 = <&usb0_pins>;
-	status = "okay";
+&pcie0 {
+        status = "okay";
 };
 
-&usb_cdns3 {
-	phys = <&usbphy0>, <&pciephy0>;
-	phy-names = "cdns3,usb2-phy", "cdns3,usb3-phy";
-};
-
-&camss {
-	status = "okay";
-};
-
-&csi2rx {
-	status = "okay";
-};
