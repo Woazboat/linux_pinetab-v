@@ -93,32 +93,6 @@
 		regulator-max-microvolt = <3300000>;
 		vin-supply = <&vcc_3v3>;
 	};
-
-	reserved-memory {
-		#address-cells = <2>;
-		#size-cells = <2>;
-		ranges;
-
-		linux,cma {
-			compatible = "shared-dma-pool";
-			reusable;
-			size = <0x0 0x20000000>;
-			alignment = <0x0 0x1000>;
-			alloc-ranges = <0x0 0x70000000 0x0 0x20000000>;
-			linux,cma-default;
-		};
-
-		e24_mem: e24@c0000000 {
-			reg = <0x0 0x6ce00000 0x0 0x1600000>;
-		};
-
-		xrp_reserved: xrpbuffer@f0000000 {
-			reg = <0x0 0x69c00000 0x0 0x01ffffff
-				0x0 0x6bc00000 0x0 0x00001000
-				0x0 0x6bc01000 0x0 0x00fff000
-				0x0 0x6cc00000 0x0 0x00001000>;
-		};
-	};
 };
 
 &i2c2 {
