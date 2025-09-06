@@ -6,11 +6,11 @@
  */
 
 /dts-v1/;
-#include "jh7110-pine64-pinetab-v.dtsi"
+#include "jh7110-pine64-pinetabv.dtsi"
 
 / {
 	model = "Pine64 PineTab-V (2025)";
-	compatible = "pine64,pinetab-v-2025", "pine64,pinetab-v", "starfive,jh7110";
+	compatible = "pine64,pinetabv-2025", "pine64,pinetabv", "starfive,jh7110";
 };
 
 &gpio_keys {

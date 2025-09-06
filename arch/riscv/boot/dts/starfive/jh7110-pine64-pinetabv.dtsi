@@ -14,7 +14,7 @@
 / {
 	chassis-type = "tablet";
 
-	bat: battery {
+	battery: battery {
 		compatible = "simple-battery";
 		charge-full-design-microamp-hours = <9800000>;
 		voltage-max-design-microvolt = <4350000>;
