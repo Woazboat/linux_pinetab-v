@@ -7,7 +7,6 @@
 
 /dts-v1/;
 #include "jh7110-pine64-pinetab-v.dtsi"
-#include <dt-bindings/input/linux-event-codes.h>
 
 / {
 	model = "Pine64 PineTab-V (2025)";
